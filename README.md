@@ -9,10 +9,10 @@ A lively and bright, fully free web page that helps users cure boredom with:
 
 ## Run locally
 
-Open `/home/runner/work/unbored/unbored/index.html` directly in a browser,
+Open `index.html` directly in a browser,
 or serve it with:
 
 ```bash
-cd /home/runner/work/unbored/unbored
+cd <project-directory>
 python3 -m http.server 8000
 ```
