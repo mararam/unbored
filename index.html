@@ -232,15 +232,21 @@
     const randomOf = (arr) => arr[Math.floor(Math.random() * arr.length)];
     const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const detectableItems = ["chair", "table", "pillow", "cup", "ball", "paper"];
+    const escapeHtml = (str) => String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll("\"", "&quot;")
+      .replaceAll("'", "&#39;");
 
     function renderActivities() {
       byId("predefinedList").innerHTML = activities.map((a) => `
         <div class="list-item">
-          <strong>${a.name}</strong><br/>
-          <span class="chip">${a.place}</span>
-          <span class="chip">${a.energy} energy</span>
+          <strong>${escapeHtml(a.name)}</strong><br/>
+          <span class="chip">${escapeHtml(a.place)}</span>
+          <span class="chip">${escapeHtml(a.energy)} energy</span>
           <span class="chip">${a.time} min</span>
-          <span class="chip">${a.materialType}</span>
+          <span class="chip">${escapeHtml(a.materialType)}</span>
         </div>
       `).join("");
     }
@@ -264,7 +270,7 @@
         return;
       }
       const pick = randomOf(matches);
-      byId("situationResult").innerHTML = `<span class="ok">Suggested:</span> ${pick.name} (${pick.place}, ${pick.energy} energy, ${pick.time} min).`;
+      byId("situationResult").innerHTML = `<span class="ok">Suggested:</span> ${escapeHtml(pick.name)} (${escapeHtml(pick.place)}, ${escapeHtml(pick.energy)} energy, ${pick.time} min).`;
     });
 
     byId("analyzeBtn").addEventListener("click", () => {
@@ -278,19 +284,19 @@
       }
 
       const keywords = text.toLowerCase();
-      const detected = detectableItems.filter((k) => keywords.includes(k));
+      const detected = detectableItems.filter((keyword) => keywords.includes(keyword));
       const detectedItem = detected[0] ? detected[0] : "movement";
       const gameName = `${place} ${capitalize(detectedItem)} Challenge`;
       const prompt = detected.length
         ? `Use ${detected.join(", ")} to create rounds with increasing difficulty.`
         : "Use available items and movement challenges in rounds.";
 
-      byId("analysisResult").innerHTML = `<span class="ok">Generated game:</span> <strong>${gameName}</strong><br>${prompt}<br>Energy: ${energy}`;
+      byId("analysisResult").innerHTML = `<span class="ok">Generated game:</span> <strong>${escapeHtml(gameName)}</strong><br>${escapeHtml(prompt)}<br>Energy: ${escapeHtml(energy)}`;
     });
 
     byId("quizBtn").addEventListener("click", () => {
       const q = randomOf(quizzes);
-      byId("quizResult").innerHTML = `<strong>${q.question}</strong><br><small>Answer: ${q.answer}</small>`;
+      byId("quizResult").innerHTML = `<strong>${escapeHtml(q.question)}</strong><br><small>Answer: ${escapeHtml(q.answer)}</small>`;
     });
 
     byId("addActivityForm").addEventListener("submit", (e) => {
@@ -302,12 +308,12 @@
         energy: data.get("energy"),
         time: Number(data.get("time")) || 15,
         materialType: data.get("materialType"),
-        materials: String(data.get("materials") || "").split(",").map((x) => x.trim()).filter(Boolean),
+        materials: String(data.get("materials") || "").split(",").map((material) => material.trim()).filter(Boolean),
         space: "Any"
       };
       activities.push(activity);
       renderActivities();
-      byId("addActivityResult").innerHTML = `<span class="ok">Added:</span> ${activity.name}`;
+      byId("addActivityResult").innerHTML = `<span class="ok">Added:</span> ${escapeHtml(activity.name)}`;
       e.target.reset();
     });
 
@@ -316,7 +322,7 @@
       const data = new FormData(e.target);
       const quiz = { question: data.get("question"), answer: data.get("answer") };
       quizzes.push(quiz);
-      byId("addQuizResult").innerHTML = `<span class="ok">Added quiz:</span> ${quiz.question}`;
+      byId("addQuizResult").innerHTML = `<span class="ok">Added quiz:</span> ${escapeHtml(quiz.question)}`;
       e.target.reset();
     });
 
@@ -329,12 +335,12 @@
         return;
       }
       const a = randomOf(picks);
-      byId("pickerResult").innerHTML = `<span class="ok">Random activity:</span> ${a.name}`;
+      byId("pickerResult").innerHTML = `<span class="ok">Random activity:</span> ${escapeHtml(a.name)}`;
     });
 
     byId("pickQuizBtn").addEventListener("click", () => {
       const q = randomOf(quizzes);
-      byId("pickerResult").innerHTML = `<span class="ok">Random quiz:</span> ${q.question}`;
+      byId("pickerResult").innerHTML = `<span class="ok">Random quiz:</span> ${escapeHtml(q.question)}`;
     });
 
     renderActivities();
