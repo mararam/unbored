@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unbored - Free boredom cure</title>
+  <style>
+    :root {
+      --bg: #fff6e9;
+      --card: #ffffff;
+      --text: #2d1b4e;
+      --accent: #ff6b6b;
+      --accent2: #4ecdc4;
+      --accent3: #ffd166;
+      --ok: #2a9d8f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, #fff8d6, #e6fffa 40%, #ffe8f7);
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+    .hero {
+      background: radial-gradient(circle at top left, var(--accent3), var(--accent2));
+      border-radius: 1rem;
+      padding: 1.2rem;
+      color: #13293d;
+      margin-bottom: 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    }
+    .hero h1 { margin: 0 0 .3rem; }
+    .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    section {
+      background: var(--card);
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+      border: 2px solid #fff;
+    }
+    h2 { margin-top: 0; font-size: 1.1rem; }
+    label { display: block; font-weight: 600; margin: .5rem 0 .2rem; }
+    input, select, textarea, button {
+      width: 100%;
+      padding: .55rem;
+      border-radius: .55rem;
+      border: 1px solid #ccc;
+      font: inherit;
+    }
+    textarea { min-height: 84px; }
+    button {
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: .6rem;
+    }
+    button.alt { background: var(--accent2); color: #102a43; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+    .chip {
+      display: inline-block;
+      font-size: .8rem;
+      background: #f3f4f6;
+      padding: .2rem .5rem;
+      border-radius: 999px;
+      margin: .1rem;
+    }
+    .list-item {
+      border: 1px solid #eee;
+      border-left: 6px solid var(--accent2);
+      border-radius: .7rem;
+      padding: .6rem;
+      margin-bottom: .45rem;
+      background: #fbfdff;
+    }
+    .result {
+      margin-top: .6rem;
+      background: #f8fafc;
+      border: 1px dashed #bcccdc;
+      border-radius: .7rem;
+      padding: .7rem;
+      min-height: 2.8rem;
+    }
+    .ok { color: var(--ok); font-weight: 700; }
+    small { color: #516170; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <h1>🎉 Unbored</h1>
+      <p><strong>To cure boredom</strong> with <strong>free</strong>, lively and bright activities, games, and quizzes.</p>
+      <small>Everything here is free of cost / donation.</small>
+    </header>
+
+    <div class="grid">
+      <section>
+        <h2>Predefined Activities</h2>
+        <div id="predefinedList"></div>
+      </section>
+
+      <section>
+        <h2>Explain your current situation</h2>
+        <form id="situationForm">
+          <label>Materialistic or Non-Materialistic?</label>
+          <select name="materialType"><option>Any</option><option>Materialistic</option><option>Non-Materialistic</option></select>
+          <div class="two">
+            <div>
+              <label>How much time do you have? (minutes)</label>
+              <input name="time" type="number" min="5" value="30" />
+            </div>
+            <div>
+              <label>How many people are playing?</label>
+              <input name="people" type="number" min="1" value="1" />
+            </div>
+          </div>
+          <div class="two">
+            <div>
+              <label>Age group</label>
+              <input name="ageGroup" placeholder="e.g. 8-12" value="8-99" />
+            </div>
+            <div>
+              <label>How much energy?</label>
+              <select name="energy"><option>Any</option><option>Low</option><option>Medium</option><option>High</option></select>
+            </div>
+          </div>
+          <div class="two">
+            <div>
+              <label>Indoor or Outdoor?</label>
+              <select name="place"><option>Any</option><option>Indoor</option><option>Outdoor</option></select>
+            </div>
+            <div>
+              <label>How much space do you have?</label>
+              <select name="space"><option>Any</option><option>Small</option><option>Medium</option><option>Large</option></select>
+            </div>
+          </div>
+          <label>What materials do you have?</label>
+          <input name="materials" placeholder="paper, cups, pillows..." />
+          <button type="submit">Find me an activity</button>
+        </form>
+        <div id="situationResult" class="result"></div>
+      </section>
+
+      <section>
+        <h2>Create a new game from your environment</h2>
+        <label>Upload a photo of your room/environment</label>
+        <input id="roomPhoto" type="file" accept="image/*" />
+        <label>Describe what can be seen (materials + environment)</label>
+        <textarea id="environmentText" placeholder="I see chairs, pillows, a table, and open floor space."></textarea>
+        <div class="two">
+          <div>
+            <label>Indoor or Outdoor?</label>
+            <select id="envPlace"><option>Indoor</option><option>Outdoor</option></select>
+          </div>
+          <div>
+            <label>Energy level?</label>
+            <select id="envEnergy"><option>Low</option><option>Medium</option><option>High</option></select>
+          </div>
+        </div>
+        <button id="analyzeBtn" class="alt" type="button">Analyze & generate game</button>
+        <div id="analysisResult" class="result"></div>
+      </section>
+
+      <section>
+        <h2>Quizzes (dedicated section)</h2>
+        <button id="quizBtn" type="button">Give me a random quiz</button>
+        <div id="quizResult" class="result"></div>
+      </section>
+
+      <section>
+        <h2>Add a new game/activity to the system</h2>
+        <form id="addActivityForm">
+          <label>Name</label><input name="name" required />
+          <div class="two">
+            <div><label>Place</label><select name="place"><option>Indoor</option><option>Outdoor</option></select></div>
+            <div><label>Energy</label><select name="energy"><option>Low</option><option>Medium</option><option>High</option></select></div>
+          </div>
+          <div class="two">
+            <div><label>Time (minutes)</label><input name="time" type="number" min="5" value="15" /></div>
+            <div><label>Material type</label><select name="materialType"><option>Materialistic</option><option>Non-Materialistic</option></select></div>
+          </div>
+          <label>Materials</label><input name="materials" placeholder="comma separated" />
+          <button type="submit">Add activity</button>
+        </form>
+        <div id="addActivityResult" class="result"></div>
+      </section>
+
+      <section>
+        <h2>Add a new quiz</h2>
+        <form id="addQuizForm">
+          <label>Question</label><input name="question" required />
+          <label>Answer</label><input name="answer" required />
+          <button type="submit">Add quiz</button>
+        </form>
+        <div id="addQuizResult" class="result"></div>
+      </section>
+
+      <section>
+        <h2>Random picker with filters</h2>
+        <div class="two">
+          <div>
+            <label>Place filter</label><select id="filterPlace"><option>Any</option><option>Indoor</option><option>Outdoor</option></select>
+          </div>
+          <div>
+            <label>Energy filter</label><select id="filterEnergy"><option>Any</option><option>Low</option><option>Medium</option><option>High</option></select>
+          </div>
+        </div>
+        <button id="pickActivityBtn" type="button">Pick random game/activity</button>
+        <button id="pickQuizBtn" type="button" class="alt">Pick random quiz</button>
+        <div id="pickerResult" class="result"></div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const activities = [
+      { name: "Pillow Obstacle Run", place: "Indoor", energy: "High", time: 20, materialType: "Materialistic", materials: ["pillows"], space: "Medium" },
+      { name: "Shadow Story Challenge", place: "Indoor", energy: "Low", time: 15, materialType: "Non-Materialistic", materials: [], space: "Small" },
+      { name: "Nature Color Hunt", place: "Outdoor", energy: "Medium", time: 30, materialType: "Non-Materialistic", materials: [], space: "Large" },
+      { name: "Cup Tower Race", place: "Indoor", energy: "Medium", time: 15, materialType: "Materialistic", materials: ["cups"], space: "Small" }
+    ];
+
+    const quizzes = [
+      { question: "Quick Brain Teaser: What has keys but can't open locks?", answer: "A piano." },
+      { question: "Creativity Quiz: Name one game you can play with only claps and footsteps.", answer: "Any rhythm imitation game works." },
+      { question: "Logic Quiz: If you run a 10 minute game twice, how many minutes total?", answer: "20 minutes." }
+    ];
+
+    const byId = (id) => document.getElementById(id);
+    const randomOf = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    function renderActivities() {
+      byId("predefinedList").innerHTML = activities.map((a) => `
+        <div class="list-item">
+          <strong>${a.name}</strong><br/>
+          <span class="chip">${a.place}</span>
+          <span class="chip">${a.energy} energy</span>
+          <span class="chip">${a.time} min</span>
+          <span class="chip">${a.materialType}</span>
+        </div>
+      `).join("");
+    }
+
+    function filteredActivities(filters = {}) {
+      return activities.filter((a) => {
+        const placeOk = !filters.place || filters.place === "Any" || a.place === filters.place;
+        const energyOk = !filters.energy || filters.energy === "Any" || a.energy === filters.energy;
+        return placeOk && energyOk;
+      });
+    }
+
+    byId("situationForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const place = data.get("place");
+      const energy = data.get("energy");
+      const matches = filteredActivities({ place, energy });
+      if (!matches.length) {
+        byId("situationResult").textContent = "No exact match found yet. Try 'Any' filters or add a new activity below.";
+        return;
+      }
+      const pick = randomOf(matches);
+      byId("situationResult").innerHTML = `<span class="ok">Suggested:</span> ${pick.name} (${pick.place}, ${pick.energy} energy, ${pick.time} min).`;
+    });
+
+    byId("analyzeBtn").addEventListener("click", () => {
+      const text = byId("environmentText").value.trim();
+      const hasImage = byId("roomPhoto").files.length > 0;
+      const place = byId("envPlace").value;
+      const energy = byId("envEnergy").value;
+      if (!text && !hasImage) {
+        byId("analysisResult").textContent = "Upload a photo or describe your environment first.";
+        return;
+      }
+
+      const keywords = text.toLowerCase();
+      const detected = ["chair", "table", "pillow", "cup", "ball", "paper"].filter((k) => keywords.includes(k));
+      const gameName = `${place} ${detected[0] ? detected[0] : "space"} challenge`;
+      const prompt = detected.length
+        ? `Use ${detected.join(", ")} to create rounds with increasing difficulty.`
+        : "Use available items and movement challenges in rounds.";
+
+      byId("analysisResult").innerHTML = `<span class="ok">Generated game:</span> <strong>${gameName}</strong><br>${prompt}<br>Energy: ${energy}`;
+    });
+
+    byId("quizBtn").addEventListener("click", () => {
+      const q = randomOf(quizzes);
+      byId("quizResult").innerHTML = `<strong>${q.question}</strong><br><small>Answer: ${q.answer}</small>`;
+    });
+
+    byId("addActivityForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const activity = {
+        name: data.get("name"),
+        place: data.get("place"),
+        energy: data.get("energy"),
+        time: Number(data.get("time")) || 15,
+        materialType: data.get("materialType"),
+        materials: String(data.get("materials") || "").split(",").map((x) => x.trim()).filter(Boolean),
+        space: "Any"
+      };
+      activities.push(activity);
+      renderActivities();
+      byId("addActivityResult").innerHTML = `<span class="ok">Added:</span> ${activity.name}`;
+      e.target.reset();
+    });
+
+    byId("addQuizForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const quiz = { question: data.get("question"), answer: data.get("answer") };
+      quizzes.push(quiz);
+      byId("addQuizResult").innerHTML = `<span class="ok">Added quiz:</span> ${quiz.question}`;
+      e.target.reset();
+    });
+
+    byId("pickActivityBtn").addEventListener("click", () => {
+      const place = byId("filterPlace").value;
+      const energy = byId("filterEnergy").value;
+      const picks = filteredActivities({ place, energy });
+      if (!picks.length) {
+        byId("pickerResult").textContent = "No activity matched current filters.";
+        return;
+      }
+      const a = randomOf(picks);
+      byId("pickerResult").innerHTML = `<span class="ok">Random activity:</span> ${a.name}`;
+    });
+
+    byId("pickQuizBtn").addEventListener("click", () => {
+      const q = randomOf(quizzes);
+      byId("pickerResult").innerHTML = `<span class="ok">Random quiz:</span> ${q.question}`;
+    });
+
+    renderActivities();
+  </script>
+</body>
+</html>
