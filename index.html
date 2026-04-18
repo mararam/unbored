@@ -232,12 +232,9 @@
     const randomOf = (arr) => arr[Math.floor(Math.random() * arr.length)];
     const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const detectableItems = ["chair", "table", "pillow", "cup", "ball", "paper"];
-    const escapeHtml = (str) => String(str)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll("\"", "&quot;")
-      .replaceAll("'", "&#39;");
+    const escapeHtml = (str) => String(str).replace(/[&<>"']/g, (char) => (
+      { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char]
+    ));
 
     function renderActivities() {
       byId("predefinedList").innerHTML = activities.map((a) => `
