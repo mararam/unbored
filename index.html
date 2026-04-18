@@ -230,6 +230,7 @@
 
     const byId = (id) => document.getElementById(id);
     const randomOf = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
     function renderActivities() {
       byId("predefinedList").innerHTML = activities.map((a) => `
@@ -277,8 +278,8 @@
 
       const keywords = text.toLowerCase();
       const detected = ["chair", "table", "pillow", "cup", "ball", "paper"].filter((k) => keywords.includes(k));
-      const rawObject = detected[0] ? detected[0] : "space";
-      const gameName = `${place} ${rawObject.charAt(0).toUpperCase() + rawObject.slice(1)} Challenge`;
+      const detectedItem = detected[0] ? detected[0] : "space";
+      const gameName = `${place} ${capitalize(detectedItem)} Challenge`;
       const prompt = detected.length
         ? `Use ${detected.join(", ")} to create rounds with increasing difficulty.`
         : "Use available items and movement challenges in rounds.";
