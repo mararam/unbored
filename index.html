@@ -90,7 +90,7 @@
 <body>
   <main class="container">
     <header class="hero">
-      <h1>🎉 Unbored</h1>
+      <h1><span aria-hidden="true">🎉</span> Unbored</h1>
       <p><strong>To cure boredom</strong> with <strong>free</strong>, lively and bright activities, games, and quizzes.</p>
       <small>Everything here is free of cost / donation.</small>
     </header>
@@ -231,6 +231,7 @@
     const byId = (id) => document.getElementById(id);
     const randomOf = (arr) => arr[Math.floor(Math.random() * arr.length)];
     const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+    const detectableItems = ["chair", "table", "pillow", "cup", "ball", "paper"];
 
     function renderActivities() {
       byId("predefinedList").innerHTML = activities.map((a) => `
@@ -277,8 +278,8 @@
       }
 
       const keywords = text.toLowerCase();
-      const detected = ["chair", "table", "pillow", "cup", "ball", "paper"].filter((k) => keywords.includes(k));
-      const detectedItem = detected[0] ? detected[0] : "space";
+      const detected = detectableItems.filter((k) => keywords.includes(k));
+      const detectedItem = detected[0] ? detected[0] : "movement";
       const gameName = `${place} ${capitalize(detectedItem)} Challenge`;
       const prompt = detected.length
         ? `Use ${detected.join(", ")} to create rounds with increasing difficulty.`
